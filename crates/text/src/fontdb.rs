@@ -908,6 +908,9 @@ pub fn system_font_dirs() -> Vec<PathBuf> {
         }
         #[cfg(windows)]
         dirs.extend(registered_font_files(&dirs));
+    } else if cfg!(target_os = "android") {
+        // The system's fonts (Roboto, the Noto families); apps can't install fonts system-wide.
+        dirs.extend(["/system/fonts", "/system/font", "/product/fonts", "/data/fonts"].map(Into::into));
     } else {
         dirs.extend(["/usr/share/fonts", "/usr/local/share/fonts"].map(Into::into));
         // The XDG data folders' `fonts` (fontconfig's user folder; Flatpak, Snap, NixOS and Guix
